@@ -13,16 +13,17 @@ def cettime():
     except:
         pass
     
-    year = time.localtime()[0]       #get current year
-    HHMarch   = time.mktime((year,3 ,(31-(int(5*year/4+4))%7),1,0,0,0,0,0)) #Time of March change to CEST
-    HHOctober = time.mktime((year,10,(31-(int(5*year/4+1))%7),1,0,0,0,0,0)) #Time of October change to CET
-    now=time.time()
-    if now < HHMarch :               # we are before last sunday of march
-        cet=time.localtime(now+3600) # CET:  UTC+1H
-    elif now < HHOctober :           # we are before last sunday of october
-        cet=time.localtime(now+7200) # CEST: UTC+2H
-    else:                            # we are after last sunday of october
-        cet=time.localtime(now+3600) # CET:  UTC+1H
+    # year = time.localtime()[0]       #get current year
+    # HHMarch   = time.mktime() #Time of March change to CEST
+    # HHOctober = time.mktime() #Time of October change to CET
+    # now=time.time()
+    # if now < HHMarch :               # we are before last sunday of march
+    #     cet=time.localtime(now+3600) # CET:  UTC+1H
+    # elif now < HHOctober :           # we are before last sunday of october
+    #     cet=time.localtime(now+7200) # CEST: UTC+2H
+    # else:                            # we are after last sunday of october
+    #     cet=time.localtime(now+3600) # CET:  UTC+1H
+    cet=time.localtime()
     return(cet)
 
 # Wi-Fi-Verbindung herstellen
@@ -37,7 +38,7 @@ while not wifi.isconnected():
 # Watchdog inizialisieren
 wtd = machine.WDT()
 
-base_url = 'http://192.168.1.242:8000/?content='
+base_url = 'http://192.168.1.241:8000/?content='
 # Schalter an Pin GP14 konfigurieren
 sensor_pin = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_UP)
 led = machine.Pin("LED")
@@ -93,6 +94,7 @@ while True:
         url = base_url + sensor_state
         # print(url)
         try:
+            print("response succsess")
             response = requests.get(url=url)
         except:
             print("An exception occurred")
@@ -102,26 +104,26 @@ while True:
 
 
 
-        ###################################################################
-        try:
-            client = mqttConnect()
-            if sensor_state == 'doorOpen':
-                client.publish(mqttTopic, str(0))
-                time.sleep(1)
-                client.publish(mqttTopic, str(1))
-            else:
-                client.publish(mqttTopic, str(1))
-                time.sleep(1)
-                client.publish(mqttTopic, str(0))
+        # ###################################################################
+        # try:
+        #     client = mqttConnect()
+        #     if sensor_state == 'doorOpen':
+        #         client.publish(mqttTopic, str(0))
+        #         time.sleep(1)
+        #         client.publish(mqttTopic, str(1))
+        #     else:
+        #         client.publish(mqttTopic, str(1))
+        #         time.sleep(1)
+        #         client.publish(mqttTopic, str(0))
 
-            print("An Topic %s gesendet" %  mqttTopic)
-            print()
-            client.disconnect()
-            print('MQTT-Verbindung beendet')
-        except OSError:
-            print()
-            print('Fehler: Keine MQTT-Verbindung')
-        ###############################################################
+        #     print("An Topic %s gesendet" %  mqttTopic)
+        #     print()
+        #     client.disconnect()
+        #     print('MQTT-Verbindung beendet')
+        # except OSError:
+        #     print()
+        #     print('Fehler: Keine MQTT-Verbindung')
+        # ###############################################################
 
 
         led.toggle()
