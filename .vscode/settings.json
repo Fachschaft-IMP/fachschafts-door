@@ -5,16 +5,12 @@
     "python.analysis.diagnosticSeverityOverrides": {
         "reportMissingModuleSource": "none"
     },
+    "micropico.syncFolder": "",
+    "micropico.openOnStart": true,
     "python.analysis.typeshedPaths": [
-        "~\\.micropico-stubs\\included",
-        "~\\.micropico-stubs\\included",
         "~\\.micropico-stubs\\included"
     ],
     "python.analysis.extraPaths": [
-        "~\\.micropico-stubs\\included",
-        "~\\.micropico-stubs\\included",
         "~\\.micropico-stubs\\included"
-    ],
-    "micropico.syncFolder": "",
-    "micropico.openOnStart": true
+    ]
 }
