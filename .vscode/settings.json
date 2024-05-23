@@ -7,9 +7,11 @@
     },
     "python.analysis.typeshedPaths": [
         "~\\.micropico-stubs\\included",
+        "~\\.micropico-stubs\\included",
         "~\\.micropico-stubs\\included"
     ],
     "python.analysis.extraPaths": [
+        "~\\.micropico-stubs\\included",
         "~\\.micropico-stubs\\included",
         "~\\.micropico-stubs\\included"
     ],

@@ -8,9 +8,9 @@ import urequests as requests
 wifi = network.WLAN(network.STA_IF)
 wifi.active(True)
 wifi.connect("Fachschaft IMP", "8clFBb:oR;Q/#scBBj")  # SSID und Passwort anpassen
-
 while not wifi.isconnected():
     pass
+print(f'local ip address: {wifi.ifconfig()[0]}')
 
 
 # Watchdog inizialisieren
@@ -28,7 +28,7 @@ start_timer_reset = time.time()
 request_duration = 60 * 60 # 60 minutes
 reset_duration = 12 * 60 * 60 # 24 hours
 
-
+print("starting while true")
 while True:
     # Schalterzustand überprüfen
     sensor_state = "doorOpen" if sensor_pin.value() else "doorClosed" 
@@ -36,6 +36,7 @@ while True:
     # Wenn sich der Schalterzustand ändert
     if sensor_state != last_sensor_state:
         last_sensor_state = sensor_state
+        print(sensor_state)
         
         url = base_url + sensor_state
 
