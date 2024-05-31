@@ -13,13 +13,10 @@ while not wifi.isconnected():
 print(f'local ip address: {wifi.ifconfig()[0]}')
 
 
-# Watchdog inizialisieren
-wtd = machine.WDT()
-
-base_url = 'http://192.168.1.241:8000/?content='
-# Schalter an Pin GP14 konfigurieren
-sensor_pin = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_UP)
-led = machine.Pin("LED")
+WTD = machine.WDT() # Watchdog inizialisieren
+BASE_URL = 'http://192.168.1.241:8000/?content='
+SENSOR_PIN = machine.Pin(14, machine.Pin.IN, machine.Pin.PULL_UP) # Schalter an Pin GP14 konfigurieren
+LED = machine.Pin("LED")
 
 last_sensor_state = "doorOpen"
 
@@ -31,14 +28,14 @@ reset_duration = 12 * 60 * 60 # 24 hours
 print("starting while true")
 while True:
     # Schalterzustand überprüfen
-    sensor_state = "doorOpen" if sensor_pin.value() else "doorClosed" 
+    sensor_state = "doorOpen" if SENSOR_PIN.value() else "doorClosed" 
 
     # Wenn sich der Schalterzustand ändert
     if sensor_state != last_sensor_state:
         last_sensor_state = sensor_state
         print(sensor_state)
         
-        url = base_url + sensor_state
+        url = BASE_URL + sensor_state
 
         try:
             response = requests.get(url=url)
@@ -46,10 +43,10 @@ while True:
             pass
 
 
-        led.toggle()
+        LED.toggle()
         for i in range(5):
-            wtd.feed()
-            time.sleep(2)
+            WTD.feed()
+            time.sleep(1.9)
 
 
     current_time = time.time()
@@ -58,7 +55,7 @@ while True:
 
     # Jede 60 Minuten die Seite aufrufen, sodass sie nicht down geht
     if elapsed_time_request >= request_duration:
-        url = base_url + sensor_state
+        url = BASE_URL + sensor_state
         try:
             response = requests.get(url=url)
         except:
@@ -68,6 +65,6 @@ while True:
     if elapsed_time_reset >= reset_duration:
         sys.exit()
 
-    wtd.feed()
+    WTD.feed()
     
-    time.sleep(2)
+    time.sleep(1.9)
